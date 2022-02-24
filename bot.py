@@ -10,7 +10,7 @@ def checkit(profile):
         url=""
         if "https://" in profile:
             url=profile
-        if is_int(profile) and "+" not in profile and "-" not in profile:
+        if profile.isdigit():
             url=f"https://steamcommunity.com/profiles/{profile}"
         else:
             url=f"https://steamcommunity.com/id/{profile}"
@@ -57,7 +57,7 @@ async def checkfile():
                                 if i != f"{steamid}|{user}\n":
                                     f.write(i)
                             f.truncate()
-        await asyncio.sleep(20)
+        await asyncio.sleep(3600*2)
 async def savenotify(steamid,user):
     print(f"Saving Notify with user {user} and steamid {steamid}")
     global bot
