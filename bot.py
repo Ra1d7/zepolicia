@@ -1,8 +1,17 @@
 import discord
 import requests
 import asyncio
+import psycopg2
+
+DB_NAME = "depcvpm07c2bsp"
+DB_USER = "tndoidyodzvucr"
+DB_PASS = "2ed1f9208c62cf219a1a680f99f73baeb92b887770c419f1d05b7082e28f7277"
+DB_HOST = "ec2-63-34-223-144.eu-west-1.compute.amazonaws.com"
+DB_PORT = "5432"
 ban_words = ["VAC ban on record","game ban on record"]
 token = "OTQ2MjgzNTQ2ODY2MjMzMzY0.YhcdOg.67lLTM_avqKoE09vpCY-Ph1i59Q"
+
+
 bot = discord.Bot()
 def checkit(profile):
     print(f"checking {profile}")
@@ -33,13 +42,17 @@ async def getuser(user):
 async def checkfile():
     global bot
     await bot.wait_until_ready()
-    print("Running checkfile")
+    print("checking database")
     while(True):
-        with open("list.txt",'r') as f:
-            for line in f.readlines():
-                if line != "\n":
-                    steamid = line.split("|")[0]
-                    user= line.split("|")[1].strip("\n").strip()
+        conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
+        print("database connected")
+        cur = conn.cursor()
+        cur.execute("SELECT URL, DUSER FROM profiles")
+        profiles = cur.fetchall()
+        conn.close()
+        for prof in profiles:
+                    steamid = prof[0]
+                    user= prof[1]
                     result = checkit(steamid)
                     if "clean" in result:
                         pass
@@ -47,25 +60,25 @@ async def checkfile():
                         await bot.wait_until_ready()
                         userd = await getuser(user)
                         await userd.send(f"{steamid} has been banned!")
-                        with open("list.txt", "r+") as f:
-                            d = f.readlines()
-                            f.seek(0)
-                            for i in d:
-                                print(i)
-                                print("=")
-                                print(f"{steamid}|{user}")
-                                if i != f"{steamid}|{user}\n":
-                                    f.write(i)
-                            f.truncate()
+                        conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
+                        print("database connected")
+                        cur = conn.cursor()
+                        cur.execute(f"DELETE FROM profiles WHERE URL = {steamid}")
+                        conn.commit()
+                        print("data deleted")
+                        conn.close()
         await asyncio.sleep(3600*2)
 async def savenotify(steamid,user):
     print(f"Saving Notify with user {user} and steamid {steamid}")
     global bot
     await bot.wait_until_ready()
-    with open("list.txt",'a') as f:
-        print(f"writing to file {steamid} steamid and user {user}")
-        f.write(f"{steamid}|{user}\n")
-    print("Saved")
+    conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
+    print("database connected")
+    cur = conn.cursor()
+    cur.execute(f"INSERT INTO profiles (URL, DUSER) VALUES({steamid},{user}")
+    conn.commit()
+    print("data inserted")
+    conn.close()
 @bot.slash_command(guild_ids=None, name="help", description="Helpful commands to use")
 async def helpmsg(ctx):
     embed = discord.Embed(title="CSGO ban checker",description=":information_source: Helpful commands to use? :information_source: ")
