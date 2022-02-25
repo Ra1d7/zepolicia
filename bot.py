@@ -89,13 +89,13 @@ async def showrows():
     await ctx.respond(f"I'm carefully watching {len(profiles)} accounts! :spy:")
 @bot.slash_command(guild_ids=None, name="help", description="Helpful commands to use")
 async def helpmsg(ctx):
-    embed = discord.Embed(title="CSGO ban checker",description=":information_source: Helpful commands to use? :information_source: ")
+    embed = discord.Embed(title="CSGO ban checker",description=":information_source: Helpful commands to use :information_source: ")
     embed.add_field(name="/help",value="Shows this message")
     embed.add_field(name="/check <steam id or URL>",value="Checks the given profile's ban status :no_entry:")
     embed.add_field(name="/notify <steam id or URL>",value="Watch this account and get notified when it gets banned :police_officer:")
     embed.add_field(name="/list",value="Shows how many accounts the bot is watching :spy:")
-    embed.add_field(name="feedback",value="More features will be added soon? :poop:")
-    embed.add_field(name="Made by Raid7#3164",value="Version 1.2")
+    embed.add_field(name="feedback",value="More features will be added soon :poop:")
+    embed.add_field(name="Made by Raid7#3164",value="Version 1.3")
     await ctx.respond(content=None,embed=embed)
 @bot.slash_command(guild_ids=None, name="check", description="Checks the given profile's ban status")
 async def check(ctx, profile):
