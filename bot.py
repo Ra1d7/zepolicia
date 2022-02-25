@@ -80,7 +80,7 @@ async def savenotify(steamid,user):
     conn.commit()
     conn.close()
 @bot.slash_command(guild_ids=None, name="list",description="Shows how many accounts the bot is watching")
-async def showrows():
+async def showrows(ctx):
     conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
     cur = conn.cursor()
     cur.execute("SELECT URL, DUSER FROM profiles")
