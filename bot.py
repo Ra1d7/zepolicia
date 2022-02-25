@@ -11,30 +11,35 @@ DB_PORT = "5432"
 ban_words = ["VAC ban on record","game ban on record"]
 token = "OTQ2MjgzNTQ2ODY2MjMzMzY0.YhcdOg.67lLTM_avqKoE09vpCY-Ph1i59Q"
 
-
+# FIND A WAY TO USE /PROFILES/ OR /ID/ appropiatly
 bot = discord.Bot()
-def checkit(profile):
-    print(f"checking {profile}")
+def cleaninput(text):
+    if "/profiles/" in text:
+        return text[36:]
+    if "/id/" in text:
+        return text[30:]
+    else:
+        return text
+def bancheck(url, prof):
     try:
-        url=""
-        if "https://" in profile:
-            url=profile
-        if profile.isdigit():
-            url=f"https://steamcommunity.com/profiles/{profile}"
-        else:
-            url=f"https://steamcommunity.com/id/{profile}"
-        print(url)
         r = requests.get(url)
         for word in ban_words:
             if word in r.text:
-                return f"Profile {profile} has {word} :no_entry_sign:"
-        else:
-            if r.status_code == 200 and "could not be found." not in r.text:
-                return f"Profile {profile} is clean! :white_check_mark:"
+                return f"Profile {prof} has {word} :no_entry_sign:"
             else:
-                return "Invalid Profile ID or URL"
+                if r.status_code == 200 and "could not be found." not in r.text:
+                    return f"Profile {prof} is clean! :white_check_mark:"
+                else:
+                    return "Invalid Profile ID or URL"
     except Exception as e:
         return "Invalid Profile ID or URL"
+def checkit(profile):
+    url=f"https://steamcommunity.com/profiles/{profile}"
+    if "Invalid" in bancheck(url,profile):
+        url=f"https://steamcommunity.com/id/{profile}"
+        return bancheck(url,profile)
+    else:
+        return bancheck(url,profile)
 async def getuser(user):
     global bot
     await bot.wait_until_ready()
@@ -42,10 +47,8 @@ async def getuser(user):
 async def checkfile():
     global bot
     await bot.wait_until_ready()
-    print("checking database")
     while(True):
         conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
-        print("database connected")
         cur = conn.cursor()
         cur.execute("SELECT URL, DUSER FROM profiles")
         profiles = cur.fetchall()
@@ -61,23 +64,19 @@ async def checkfile():
                         userd = await getuser(user)
                         await userd.send(f"{steamid} has been banned!")
                         conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
-                        print("database connected")
                         cur = conn.cursor()
-                        cur.execute(f"DELETE FROM profiles WHERE URL = {steamid}")
+                        cur.execute(f"DELETE FROM profiles WHERE URL='{steamid}'")
                         conn.commit()
-                        print("data deleted")
                         conn.close()
-        await asyncio.sleep(3600*2)
+        print('[+] Checking Database [+]')
+        await asyncio.sleep(3600*5)
 async def savenotify(steamid,user):
-    print(f"Saving Notify with user {user} and steamid {steamid}")
     global bot
     await bot.wait_until_ready()
     conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
-    print("database connected")
     cur = conn.cursor()
-    cur.execute(f"INSERT INTO profiles (URL, DUSER) VALUES({steamid},{user}")
+    cur.execute(f"INSERT INTO profiles (URL, DUSER) VALUES('{steamid}','{user}')")
     conn.commit()
-    print("data inserted")
     conn.close()
 @bot.slash_command(guild_ids=None, name="help", description="Helpful commands to use")
 async def helpmsg(ctx):
@@ -90,9 +89,11 @@ async def helpmsg(ctx):
     await ctx.respond(content=None,embed=embed)
 @bot.slash_command(guild_ids=None, name="check", description="Checks the given profile's ban status")
 async def check(ctx, profile):
+    profile = cleaninput(profile)
     await ctx.respond(checkit(str(profile)))
 @bot.slash_command(guild_ids=None, name="notify",description="Watch this account and get notified when it gets banned")
 async def notify(ctx, profile):
+    profile = cleaninput(profile)
     user = ctx.author
     check = checkit(str(profile))
     if "clean" in check:
