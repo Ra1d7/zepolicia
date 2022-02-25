@@ -14,10 +14,11 @@ token = "OTQ2MjgzNTQ2ODY2MjMzMzY0.YhcdOg.67lLTM_avqKoE09vpCY-Ph1i59Q"
 # FIND A WAY TO USE /PROFILES/ OR /ID/ appropiatly
 bot = discord.Bot()
 def cleaninput(text):
+    txt = text.split('/')
     if "/profiles/" in text:
-        return text[36:]
+        return txt[4]
     if "/id/" in text:
-        return text[30:]
+        return txt[4]
     else:
         return text
 def bancheck(url, prof):
