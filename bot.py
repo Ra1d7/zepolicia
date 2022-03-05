@@ -63,7 +63,7 @@ async def checkfile():
                     if "has" in result:
                         await bot.wait_until_ready()
                         userd = await getuser(user)
-                        await userd.send(f"{steamid} has been banned!")
+                        await userd.send(f":rotating_light: {steamid} has been banned! :rotating_light: ")
                         conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
                         cur = conn.cursor()
                         cur.execute(f"DELETE FROM profiles WHERE URL='{steamid}'")
