@@ -3,10 +3,10 @@ import requests
 import asyncio
 import psycopg2
 
-DB_NAME = "depcvpm07c2bsp"
-DB_USER = "tndoidyodzvucr"
-DB_PASS = "2ed1f9208c62cf219a1a680f99f73baeb92b887770c419f1d05b7082e28f7277"
-DB_HOST = "ec2-63-34-223-144.eu-west-1.compute.amazonaws.com"
+DB_NAME = "d7mt90gk897rl7"
+DB_USER = "aqvqghwucpheqw"
+DB_PASS = "dd2ab5cc5f83f4424078f1195f540866935f444e3ac8eea8278f173f659ed8b9"
+DB_HOST = "ec2-52-31-221-164.eu-west-1.compute.amazonaws.com"
 DB_PORT = "5432"
 ban_words = ["VAC ban on record","game ban on record"]
 token = "OTQ2MjgzNTQ2ODY2MjMzMzY0.YhcdOg.67lLTM_avqKoE09vpCY-Ph1i59Q"
