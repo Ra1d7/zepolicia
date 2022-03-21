@@ -3,11 +3,13 @@ import requests
 import asyncio
 import psycopg2
 
-DB_NAME = "d7mt90gk897rl7"
-DB_USER = "aqvqghwucpheqw"
-DB_PASS = "dd2ab5cc5f83f4424078f1195f540866935f444e3ac8eea8278f173f659ed8b9"
-DB_HOST = "ec2-52-31-221-164.eu-west-1.compute.amazonaws.com"
-DB_PORT = "5432"
+DATABASE_URL = "postgres://aqvqghwucpheqw:dd2ab5cc5f83f4424078f1195f540866935f444e3ac8eea8278f173f659ed8b9@ec2-52-31-221-164.eu-west-1.compute.amazonaws.com:5432/d7mt90gk897rl7"
+values = DATABASE_URL.split(":")
+DB_NAME = values[3].split("/")[1]
+DB_USER = values[1][2:]
+DB_PASS = values[2].split("@")[0]
+DB_HOST = values[2].split("@")[1]
+DB_PORT = values[3].split("/")[0]
 ban_words = ["VAC ban on record","game ban on record"]
 token = "OTQ2MjgzNTQ2ODY2MjMzMzY0.YhcdOg.67lLTM_avqKoE09vpCY-Ph1i59Q"
 
