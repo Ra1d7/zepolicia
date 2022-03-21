@@ -3,7 +3,7 @@ import requests
 import asyncio
 import psycopg2
 import os
-database_url = os.environ.get('DATABASE_URL', 'postgres://aqvqghwucpheqw:dd2ab5cc5f83f4424078f1195f540866935f444e3ac8eea8278f173f659ed8b9@ec2-52-31-221-164.eu-west-1.compute.amazonaws.com:5432/d7mt90gk897rl7')
+DATABASE_URL = os.environ.get('DATABASE_URL', 'postgres://aqvqghwucpheqw:dd2ab5cc5f83f4424078f1195f540866935f444e3ac8eea8278f173f659ed8b9@ec2-52-31-221-164.eu-west-1.compute.amazonaws.com:5432/d7mt90gk897rl7')
 values = DATABASE_URL.split(":")
 DB_NAME = values[3].split("/")[1]
 DB_USER = values[1][2:]
