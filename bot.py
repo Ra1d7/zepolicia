@@ -63,6 +63,7 @@ async def checkfile():
                     if "clean" in result:
                         pass
                     if "has" in result:
+                        print(f"## Found One {prof[0]} for {prof[1]} ##")
                         await bot.wait_until_ready()
                         userd = await getuser(user)
                         await userd.send(f":rotating_light: {steamid} has been banned! :rotating_light: ")
