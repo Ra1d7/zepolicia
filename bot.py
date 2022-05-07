@@ -63,9 +63,10 @@ async def checkfile():
                     if "clean" in result:
                         pass
                     if "has" in result:
-                        print(f"## Found One {prof[0]} for {prof[1]} ##")
+                        me = await getuser('192862709828681729')
                         await bot.wait_until_ready()
                         userd = await getuser(user)
+                        await me.send(f"## Found One {prof[0]} for {prof[1]} ##")
                         await userd.send(f":rotating_light: {steamid} has been banned! :rotating_light: ")
                         conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
                         cur = conn.cursor()
