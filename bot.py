@@ -58,12 +58,12 @@ async def checkfile():
         conn.close()
         for prof in profiles:
                     steamid = prof[0]
-                    user= prof[1]
+                    user= int(prof[1])
                     result = checkit(steamid)
                     if "clean" in result:
                         pass
                     if "has" in result:
-                        me = await getuser('192862709828681729')
+                        me = await getuser(192862709828681729)
                         await bot.wait_until_ready()
                         userd = await getuser(user)
                         await me.send(f"## Found One {prof[0]} for {prof[1]} ##")
