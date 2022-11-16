@@ -11,7 +11,7 @@ DB_PASS = values[2].split("@")[0]
 DB_HOST = values[2].split("@")[1]
 DB_PORT = values[3].split("/")[0]
 ban_words = ["VAC ban on record","game ban on record"]
-token = "OTQ2MjgzNTQ2ODY2MjMzMzY0.GtKoDS.mat4XSeGie3XvqLrGJfstd-ZHp6gPLzj4cYpWs"
+token = "🙂"
 
 # FIND A WAY TO USE /PROFILES/ OR /ID/ appropiatly
 bot = discord.Bot()
